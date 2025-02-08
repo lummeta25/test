@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>News Portal</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    
+    <style>
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --primary-color: #2a5c82;
+            --accent-color: #e74c3c;
+            --text-color: #333;
+            --surface-color: #fff;
+            --gap: 1.5rem;
+            --radius: 0.5rem;
+            --shadow: 0 3px 6px rgba(0,0,0,0.1);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: #f8f9fa;
+        }
+
+        .header {
+            background: var(--primary-color);
+            color: white;
+            padding: 1rem;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .main-grid {
+            display: grid;
+            gap: var(--gap);
+            padding: 1rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .article-card {
+            background: var(--surface-color);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            transition: transform 0.2s ease;
+        }
+
+        .article-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .article-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .article-content {
+            padding: 1.5rem;
+        }
+
+        .ad-container {
+            background: #f1f3f5;
+            border-radius: var(--radius);
+            padding: 1rem;
+            margin: 1rem 0;
+            text-align: center;
+            border: 1px solid #dee2e6;
+        }
+
+        .popup-ad {
+            position: fixed;
+            bottom: 1rem;
+            right: 1rem;
+            background: var(--surface-color);
+            padding: 1.5rem;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            max-width: 300px;
+            display: none;
+            z-index: 1001;
+        }
+
+        /* Social Share Styles from index.html */
+        .social-share {
+            display: flex;
+            justify-content: flex-start;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .social-share a {
+            color: #fff;
+            text-decoration: none;
+            padding: 8px;
+            border-radius: 50%;
+            transition: background-color 0.3s;
+            width: 35px;
+            height: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .social-share .facebook { background-color: #3b5998; }
+        .social-share .twitter { background-color: #000000; }
+        .social-share .linkedin { background-color: #0077b5; }
+
+        .social-share .facebook:hover { background-color: #344e86; }
+        .social-share .twitter:hover { background-color: #333333; }
+        .social-share .linkedin:hover { background-color: #006aa7; }
+
+        @media (max-width: 768px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <h1>News Portal</h1>
+    </header>
+
+    <main class="main-grid" id="mainContent"></main>
+
+    <div class="popup-ad" id="popupAd">
+        <h3>Special Offer</h3>
+        <p>Subscribe to our newsletter!</p>
+        <button onclick="closeAd()">Close</button>
+    </div>
+
+    <script>
+        const articles = [
+            {
+                id: 1,
+                title: "Breaking News: Major Technology Breakthrough",
+                category: "Technology",
+                date: "2023-08-20",
+                content: `<p>Scientists have announced a revolutionary advancement in quantum computing...</p>
+                         <p>This breakthrough could change the future of computing as we know it...</p>`,
+                image: "https://picsum.photos/800/450?tech"
+            },
+            {
+                id: 2,
+                title: "Global Climate Summit Concludes",
+                category: "Environment",
+                date: "2023-08-19",
+                content: `<p>World leaders reach historic agreement on emissions reduction...</p>
+                         <p>The new climate pact sets ambitious targets for the next decade...</p>`,
+                image: "https://picsum.photos/800/450?nature"
+            }
+        ];
+
+        class NewsApp {
+            constructor() {
+                this.mainContent = document.getElementById('mainContent');
+                this.popupAd = document.getElementById('popupAd');
+                this.initialize();
+            }
+
+            initialize() {
+                this.renderArticles();
+                this.setupAds();
+                this.setupEventListeners();
+            }
+
+            renderArticles() {
+                this.mainContent.innerHTML = articles.map(article => `
+                    <article class="article-card">
+                        <img src="${article.image}" alt="${article.title}">
+                        <div class="article-content">
+                            <h2>${article.title}</h2>
+                            <div class="article-meta">
+                                <span>${article.date}</span> • 
+                                <span>${article.category}</span>
+                            </div>
+                            ${this.insertAds(article.content)}
+                            <div class="social-share">
+                                <a href="#" class="facebook" onclick="shareOnFacebook('${article.title}'); return false;">
+                                    <i class="fab fa-facebook-f"></i>
+                                </a>
+                                <a href="#" class="twitter" onclick="shareOnTwitter('${article.title}'); return false;">
+                                    <i class="fab fa-x-twitter"></i>
+                                </a>
+                                <a href="#" class="linkedin" onclick="shareOnLinkedIn('${article.title}'); return false;">
+                                    <i class="fab fa-linkedin-in"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </article>
+                `).join('');
+            }
+
+            insertAds(content) {
+                return content.split('</p>').map((para, index) => 
+                    `${para}</p>${index % 2 === 0 ? '<div class="ad-container">Advertisement</div>' : ''}`
+                ).join('');
+            }
+
+            setupAds() {
+                if (!localStorage.getItem('adShown')) {
+                    this.popupAd.style.display = 'block';
+                    localStorage.setItem('adShown', 'true');
+                }
+            }
+
+            setupEventListeners() {
+                window.addEventListener('resize', this.handleResize.bind(this));
+            }
+
+            handleResize() {
+                console.log('Handling resize...');
+            }
+        }
+
+        // Sharing functions
+        function shareOnFacebook(title) {
+            const url = encodeURIComponent(window.location.href);
+            window.open(`https://facebook.com/sharer/sharer.php?u=${url}&t=${encodeURIComponent(title)}`, '_blank', 'width=626,height=436');
+        }
+
+        function shareOnTwitter(title) {
+            const url = encodeURIComponent(window.location.href);
+            window.open(`https://twitter.com/intent/tweet?url=${url}&text=${encodeURIComponent(title)}`, '_blank', 'width=626,height=436');
+        }
+
+        function shareOnLinkedIn(title) {
+            const url = encodeURIComponent(window.location.href);
+            window.open(`https://www.linkedin.com/shareArticle?mini=true&url=${url}&title=${encodeURIComponent(title)}`, '_blank', 'width=626,height=436');
+        }
+
+        function closeAd() {
+            document.getElementById('popupAd').style.display = 'none';
+        }
+
+        document.addEventListener('DOMContentLoaded', () => new NewsApp());
+    </script>
+</body>
+</html>

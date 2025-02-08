@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>News Portal</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <!-- Google AdSense Script -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5751303135131939"
+     crossorigin="anonymous"></script>
+</head>
+<body>
+    <header class="header">
+        <h1>News Portal</h1>
+    </header>
+
+    <main class="main-grid" id="mainContent"></main>
+
+    <div class="popup-ad" id="popupAd">
+        <h3>Special Offer</h3>
+        <p>Subscribe to our newsletter!</p>
+        <!-- AdSense Ad in Popup -->
+        <ins class="adsbygoogle"
+             style="display:block"
+             data-ad-client="ca-pub-5751303135131939"
+             data-ad-slot="2028142398"
+             data-ad-format="auto"
+             data-full-width-responsive="true"></ins>
+        <script>
+             (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+        <button onclick="closeAd()">Close</button>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

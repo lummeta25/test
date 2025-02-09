@@ -68,9 +68,9 @@ class NewsApp {
             <div class="ad-container">
                 <ins class="adsbygoogle"
                      style="display:block"
-                     data-ad-client="ca-pub-5751303135131939"
-                     data-ad-slot="2028142398"
-                     data-ad-format="auto"
+                     data-ad-client="ca-pub-7001786702958070"
+                     data-ad-slot="2466367924"
+                     data-ad-format="fluid"
                      data-full-width-responsive="true"></ins>
                 <script>
                      (adsbygoogle = window.adsbygoogle || []).push({});
